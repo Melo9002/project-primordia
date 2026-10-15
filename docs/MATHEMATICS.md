@@ -84,3 +84,5 @@ After integration, A and B are clamped to [0, 1.5], R to [0, 2], and T to [0, 3]
 The feed/removal terms, resource exchange, thermal exchange, and clamps are sources or sinks. The default world is not conservative. Only deliberately closed configurations should be tested for conservation.
 
 Spatial patterning demonstrates nonlinear dynamics and symmetry breaking. Persistence can be measured, but it does not by itself demonstrate self-maintenance. Recovery after disturbance must be compared with passive and feedback-disabled controls before it can support a homeostasis claim.
+
+Prototype 2 adds waste, structural memory, spatially varying conservative transport, and enclosure analysis. Its equations and control design are documented separately in [PALIMPSEST.md](PALIMPSEST.md).

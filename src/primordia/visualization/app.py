@@ -24,13 +24,14 @@ WINDOW = (1280, 840)
 WORLD_RECT = pygame.Rect(24, 96, 720, 720)
 SIDEBAR_X = 772
 SIDEBAR_W = 484
-MODES = ["COMPOSITE", "A", "B", "R", "T"]
+MODES = ["COMPOSITE", "A", "B", "R", "T", "W", "M"]
 TOOLS = [
     ("HEAT", "T", 0.45, (244, 105, 88)),
     ("COOL", "T", -0.45, (78, 164, 230)),
     ("ADD B", "B", 0.35, (208, 100, 237)),
     ("REMOVE B", "B", -0.35, (145, 112, 192)),
     ("ADD R", "R", 0.45, (91, 215, 146)),
+    ("BREACH", "M", -1.0, (238, 184, 81)),
 ]
 
 
@@ -50,7 +51,7 @@ def _pill(surface: pygame.Surface, font: pygame.font.Font, text: str, rect: pyga
 
 
 def _view_rects() -> list[pygame.Rect]:
-    widths = [112, 46, 46, 46, 46]
+    widths = [112, 46, 46, 46, 46, 46, 46]
     result, x = [], SIDEBAR_X
     for width in widths:
         result.append(pygame.Rect(x, 102, width, 32))
@@ -82,12 +83,13 @@ def run_app(config: WorldConfig, preset_path: Path | None = None) -> None:
     small = pygame.font.SysFont("consolas", 12)
     number = pygame.font.SysFont("consolas", 16, bold=True)
     title = pygame.font.SysFont("segoeui", 25, bold=True)
-    simulation, observer = Simulation(config), Observer()
+    simulation = Simulation(config)
+    observer = Observer(config.palimpsest.enclosure_threshold)
     paused, mode_index, tool_index, steps_per_second, accumulator = False, 0, 0, 120, 0.0
     radius, running = 8, True
     first = observer.record(simulation.state)
     temperatures = [(first.tick, first.mean_temperature)]
-    totals_b = [(first.tick, first.total_b)]
+    structure_values = [(first.tick, first.total_matrix if config.palimpsest.enabled else first.total_b)]
     disturbance_ticks: list[int] = []
     notice, notice_until = "", 0
 
@@ -105,10 +107,10 @@ def run_app(config: WorldConfig, preset_path: Path | None = None) -> None:
                     single_step = True
                 elif event.key == pygame.K_r:
                     simulation.reset()
-                    observer = Observer()
+                    observer = Observer(config.palimpsest.enclosure_threshold)
                     initial = observer.record(simulation.state)
                     temperatures[:] = [(initial.tick, initial.mean_temperature)]
-                    totals_b[:] = [(initial.tick, initial.total_b)]
+                    structure_values[:] = [(initial.tick, initial.total_matrix if config.palimpsest.enabled else initial.total_b)]
                     disturbance_ticks.clear()
                 elif event.key in (pygame.K_TAB, pygame.K_v):
                     mode_index = (mode_index + 1) % len(MODES)
@@ -164,7 +166,7 @@ def run_app(config: WorldConfig, preset_path: Path | None = None) -> None:
             if simulation.state.tick % 5 == 0 or single_step:
                 observation = observer.record(simulation.state)
                 temperatures.append((observation.tick, observation.mean_temperature))
-                totals_b.append((observation.tick, observation.total_b))
+                structure_values.append((observation.tick, observation.total_matrix if config.palimpsest.enabled else observation.total_b))
 
         screen.fill((6, 12, 19))
         pygame.draw.rect(screen, (9, 17, 25), pygame.Rect(0, 0, WINDOW[0], 72))
@@ -196,7 +198,7 @@ def run_app(config: WorldConfig, preset_path: Path | None = None) -> None:
             screen.blit(brush, (mouse[0] - center, mouse[1] - center))
             gx, gy = _world_position(mouse, config)
             state = simulation.state
-            hover_text = f"({gx:03}, {gy:03})  A {state.a[gy,gx]:.3f}  B {state.b[gy,gx]:.3f}  R {state.resource[gy,gx]:.3f}  T {state.temperature[gy,gx]:.3f}"
+            hover_text = f"({gx:03}, {gy:03})  A {state.a[gy,gx]:.3f}  B {state.b[gy,gx]:.3f}  R {state.resource[gy,gx]:.3f}  T {state.temperature[gy,gx]:.3f}  W {state.waste[gy,gx]:.3f}  M {state.matrix[gy,gx]:.3f}"
             hover_image = small.render(hover_text, True, TEXT)
             hover_rect = hover_image.get_rect()
             hover_rect.bottomleft = (WORLD_RECT.x + 14, WORLD_RECT.bottom - 57)
@@ -228,7 +230,9 @@ def run_app(config: WorldConfig, preset_path: Path | None = None) -> None:
             _text(screen, number, value, x, info.y + 29, TEXT)
 
         draw_series(screen, temperatures, pygame.Rect(SIDEBAR_X, 326, SIDEBAR_W, 145), (243, 104, 91), "mean temperature", small, number, disturbance_ticks)
-        draw_series(screen, totals_b, pygame.Rect(SIDEBAR_X, 483, SIDEBAR_W, 145), (201, 103, 241), "total B", small, number, disturbance_ticks)
+        structure_label = "total matrix" if config.palimpsest.enabled else "total B"
+        structure_color = (224, 183, 119) if config.palimpsest.enabled else (201, 103, 241)
+        draw_series(screen, structure_values, pygame.Rect(SIDEBAR_X, 483, SIDEBAR_W, 145), structure_color, structure_label, small, number, disturbance_ticks)
 
         _text(screen, ui_bold, "QUICK CONTROLS", SIDEBAR_X, 648, MUTED)
         controls = [

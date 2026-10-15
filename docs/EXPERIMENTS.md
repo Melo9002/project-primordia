@@ -38,6 +38,16 @@ Use the GUI to generate hypotheses, inspect spatial dynamics, and choose disturb
 
 Run a factorial comparison across 20 seeds with thermal feedback enabled and disabled, using the same localized heat pulse. Measure integrated deviation from each matching baseline and time-to-recovery for mean temperature and B variance. This tests whether the interacting pattern changes disturbance response beyond passive thermal relaxation.
 
+## Palimpsest controls
+
+Run the dynamic, matrix-disabled, frozen-matrix, and shuffled-matrix branches from one identical mature history:
+
+~~~powershell
+.\run-primordia.cmd --preset presets/palimpsest.json homeostasis --maturation-ticks 2000 --response-ticks 1000 --ambient-shift 0.2 --breach-radius 4 --output-dir outputs/palimpsest-controls
+~~~
+
+The ambient shift tests buffering against the environment. A breach additionally tests reconstruction, but the same removed region must be applied to every matrix-bearing control. Compare interior/exterior trajectories, enclosed area, total matrix, and resource cost. Predeclare thresholds before interpreting recovery.
+
 ## Honest interpretation
 
 Do not infer adaptation from a single trajectory, homeostasis from equilibrium, or organism status from an organic appearance. Report null and unstable results. Preserve raw CSV, preset, seed, version, and code commit.

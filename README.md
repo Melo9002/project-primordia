@@ -13,7 +13,7 @@
 
 </div>
 
-PRIMORDIA is a working two-dimensional numerical laboratory for studying pattern formation, persistence, disturbance, and environmental feedback. Its world contains four continuous fields—reactants **A** and **B**, resource **R**, and temperature **T**—with no creatures, goals, health values, or programmed survival behavior.
+PRIMORDIA is a working two-dimensional numerical laboratory for studying pattern formation, persistence, disturbance, and environmental feedback. Prototype 1 contains reactants **A** and **B**, resource **R**, and temperature **T**. Prototype 2 optionally adds waste **W** and structural memory **M**, with no creatures, goals, health values, or programmed survival behavior.
 
 Prototype 1 uses a modified Gray–Scott reaction–diffusion system. Resource availability gates the autocatalytic reaction, the reaction releases heat, and the environment supplies/removes resource and exchanges heat with an ambient reservoir. These additions create feedback worth measuring. They do not establish life, intelligence, adaptation, or homeostasis.
 
@@ -27,6 +27,7 @@ Prototype 1 uses a modified Gray–Scott reaction–diffusion system. Resource a
 - Export observations as CSV and state snapshots as compressed NPZ.
 - Run the same configuration headlessly.
 - Compare a baseline world and disturbed world from the same initial seed.
+- Watch activity deposit a transport-altering matrix and compare it with frozen, randomized, and matrix-disabled controls.
 
 ## Install on Windows
 
@@ -117,6 +118,12 @@ Matched baseline and heated world:
 python -m primordia --preset presets/coral.json pair --ticks 1000 --disturb-at 400 --field T --amount 0.7 --radius 8 --output-dir outputs/heat-pair
 ~~~
 
+Palimpsest four-control experiment:
+
+~~~powershell
+.\run-primordia.cmd --preset presets/palimpsest.json homeostasis --maturation-ticks 2000 --response-ticks 1000 --ambient-shift 0.2 --breach-radius 4 --output-dir outputs/palimpsest-controls
+~~~
+
 Run the test suite:
 
 ~~~powershell
@@ -130,6 +137,7 @@ python -m pytest
 | `coral.json` | A reliable pattern-oriented starting regime with moderate feedback |
 | `homogeneous.json` | A deliberately uniform control |
 | `instability.json` | Stronger coupling and reflective boundaries for parameter sensitivity |
+| `palimpsest.json` | Waste, structural memory, boundary-fed transport, and emergent enclosure experiments |
 
 Preset names describe intended regimes, not experimental findings. Exact appearances depend on duration and numerical parameters.
 
@@ -147,7 +155,7 @@ tests/                        numerical and integration checks
 docs/                         mathematics, architecture, experiments, user guide, log
 ~~~
 
-Read [MATHEMATICS.md](docs/MATHEMATICS.md) for every equation and approximation, [ARCHITECTURE.md](docs/ARCHITECTURE.md) for data flow, [EXPERIMENTS.md](docs/EXPERIMENTS.md) for careful interpretation, and [USER_GUIDE.md](docs/USER_GUIDE.md) for all controls.
+Read [MATHEMATICS.md](docs/MATHEMATICS.md) for the base equations, [PALIMPSEST.md](docs/PALIMPSEST.md) for Prototype 2, [ARCHITECTURE.md](docs/ARCHITECTURE.md) for data flow, [EXPERIMENTS.md](docs/EXPERIMENTS.md) for careful interpretation, and [USER_GUIDE.md](docs/USER_GUIDE.md) for all controls.
 
 ## Current scientific status
 

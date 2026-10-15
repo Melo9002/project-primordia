@@ -16,6 +16,8 @@ class InitialConfig:
     b: float = 0.0
     resource: float = 1.0
     temperature: float = 1.0
+    waste: float = 0.0
+    matrix: float = 0.0
     noise: float = 0.015
     seed_radius: int = 8
     seed_b: float = 0.85
@@ -47,6 +49,25 @@ class EnvironmentConfig:
     resource_supply: float = 0.018
     resource_removal: float = 0.002
     resource_target: float = 1.0
+    exchange_mode: str = "uniform"
+
+
+@dataclass(slots=True)
+class PalimpsestConfig:
+    enabled: bool = False
+    matrix_dynamic: bool = True
+    waste_production: float = 0.35
+    waste_decay: float = 0.012
+    waste_diffusion: float = 0.11
+    matrix_deposition: float = 1.2
+    matrix_erosion: float = 0.0015
+    matrix_dissolution: float = 0.006
+    permeability_a: float = 2.0
+    permeability_b: float = 4.0
+    permeability_resource: float = 1.2
+    permeability_temperature: float = 2.5
+    permeability_waste: float = 1.0
+    enclosure_threshold: float = 0.28
 
 
 @dataclass(slots=True)
@@ -61,6 +82,7 @@ class WorldConfig:
     reaction: ReactionConfig = field(default_factory=ReactionConfig)
     diffusion: DiffusionConfig = field(default_factory=DiffusionConfig)
     environment: EnvironmentConfig = field(default_factory=EnvironmentConfig)
+    palimpsest: PalimpsestConfig = field(default_factory=PalimpsestConfig)
 
     def validate(self) -> None:
         if self.width < 8 or self.height < 8:
@@ -69,9 +91,12 @@ class WorldConfig:
             raise ValueError("dt must be in (0, 1]")
         if self.boundary not in {"periodic", "reflective"}:
             raise ValueError("boundary must be periodic or reflective")
-        for group in (self.diffusion, self.environment, self.reaction):
+        if self.environment.exchange_mode not in {"uniform", "boundary"}:
+            raise ValueError("exchange_mode must be uniform or boundary")
+        for group in (self.diffusion, self.environment, self.reaction, self.palimpsest):
             for item in fields(group):
-                if "heating" not in item.name and getattr(group, item.name) < 0:
+                value = getattr(group, item.name)
+                if isinstance(value, (int, float)) and not isinstance(value, bool) and "heating" not in item.name and value < 0:
                     raise ValueError(f"{item.name} must be nonnegative")
 
     def to_dict(self) -> dict[str, Any]:
@@ -83,13 +108,14 @@ class WorldConfig:
         extra = set(data) - known
         if extra:
             raise ValueError(f"unknown configuration keys: {sorted(extra)}")
-        flat = {k: v for k, v in data.items() if k not in {"initial", "reaction", "diffusion", "environment"}}
+        flat = {k: v for k, v in data.items() if k not in {"initial", "reaction", "diffusion", "environment", "palimpsest"}}
         config = cls(
             **flat,
             initial=_load_group(InitialConfig, data.get("initial", {})),
             reaction=_load_group(ReactionConfig, data.get("reaction", {})),
             diffusion=_load_group(DiffusionConfig, data.get("diffusion", {})),
             environment=_load_group(EnvironmentConfig, data.get("environment", {})),
+            palimpsest=_load_group(PalimpsestConfig, data.get("palimpsest", {})),
         )
         config.validate()
         return config

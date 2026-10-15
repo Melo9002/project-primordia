@@ -1,0 +1,13 @@
+{
+  "width": 96,
+  "height": 96,
+  "dt": 0.4,
+  "seed": 31,
+  "boundary": "reflective",
+  "dtype": "float64",
+  "initial": {"a": 1.0, "b": 0.0, "resource": 1.0, "temperature": 1.0, "waste": 0.0, "matrix": 0.0, "noise": 0.018, "seed_radius": 7, "seed_b": 0.88},
+  "reaction": {"feed": 0.022, "kill": 0.051, "resource_half_saturation": 0.01, "temperature_sensitivity": 1.2, "reaction_heat": 0.012, "resource_cost": 0.04},
+  "diffusion": {"a": 0.16, "b": 0.08, "resource": 0.10, "temperature": 0.12},
+  "environment": {"ambient_temperature": 1.0, "thermal_exchange": 0.08, "external_heating": 0.0, "resource_supply": 0.12, "resource_removal": 0.001, "resource_target": 1.0, "exchange_mode": "boundary"},
+  "palimpsest": {"enabled": true, "matrix_dynamic": true, "waste_production": 0.42, "waste_decay": 0.01, "waste_diffusion": 0.10, "matrix_deposition": 2.4, "matrix_erosion": 0.0007, "matrix_dissolution": 0.0015, "permeability_a": 2.5, "permeability_b": 5.0, "permeability_resource": 1.5, "permeability_temperature": 3.0, "permeability_waste": 1.2, "enclosure_threshold": 0.5}
+}

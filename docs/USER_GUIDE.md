@@ -8,7 +8,7 @@ For a manual environment, install with `python -m pip install -e ".[dev]"`, acti
 
 ## Display
 
-The large panel renders the selected field. The composite maps B through a dark-cyan-gold chemistry palette, uses resource as illumination, adds a restrained warm/cool temperature tint, and highlights B gradients at reaction fronts. Single-field views use dedicated perceptual palettes and documented ranges. The legend shows the active scale.
+The large panel renders the selected field. The composite maps B through a dark-cyan-gold chemistry palette, uses resource as illumination, adds restrained temperature/waste tinting, and renders matrix as a warm structural layer. Single-field views include A, B, R, T, W, and M with dedicated palettes and documented ranges.
 
 Hovering over the world shows grid coordinates and exact A/B/R/T values. The translucent colored circle previews the selected disturbance and brush radius. Metric cards report current values, recent ranges, and amber event lines for applied disturbances.
 
@@ -21,6 +21,7 @@ Hovering over the world shows grid coordinates and exact A/B/R/T values. The tra
 | `R` | reset arrays and RNG to the original seed |
 | `Tab` or `V` | cycle composite, A, B, R, T |
 | `T` | cycle heat, cool, add B, remove B, add resource |
+| `T` continued | cycle to breach, which removes matrix locally |
 | click view/tool pills | select a field view or disturbance directly |
 | mouse click/drag | apply the selected tool to actual state |
 | `[` / `]` | change brush radius |
@@ -34,7 +35,7 @@ The yellow circle previews the disturbance footprint. Tool changes are bounded t
 
 ## Configuration
 
-Top-level keys set dimensions, fixed `dt`, seed, dtype, and boundary. `initial` controls base fields, noise, and central perturbation. `reaction` controls Gray–Scott and experimental coupling. `diffusion` has one coefficient per field. `environment` contains ambient temperature, exchange, heating, resource supply/removal, and supplied concentration.
+Top-level keys set dimensions, fixed `dt`, seed, dtype, and boundary. `initial` controls base fields, noise, and central perturbation. `reaction` controls Gray–Scott and experimental coupling. `diffusion` has coefficients for A/B/R/T. `environment` contains ambient temperature, exchange, heating, resource supply/removal, supplied concentration, and uniform/boundary exchange mode. `palimpsest` controls waste, matrix dynamics, permeability, and the analysis threshold.
 
 Unknown keys fail loudly. GUI parameter changes affect the live world; reset returns to the initially loaded configuration. Pressing `S` intentionally replaces the selected JSON preset.
 

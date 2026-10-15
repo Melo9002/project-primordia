@@ -6,7 +6,7 @@ PRIMORDIA keeps the numerical world independent of display and input. The same `
 
 - `config.py` defines nested dataclasses, validates values, and performs JSON loading/saving.
 - `simulation/state.py` owns the four NumPy arrays, tick, validation, and NPZ snapshots.
-- `simulation/diffusion.py` computes a five-point discrete Laplacian with periodic or reflective boundaries.
+- `simulation/diffusion.py` computes a five-point Laplacian and conservative variable-diffusivity face fluxes with periodic or reflective boundaries.
 - `simulation/reactions.py` computes local Gray–Scott-derived reaction terms plus resource/temperature coupling.
 - `simulation/environment.py` computes explicit resource and thermal exchange.
 - `simulation/engine.py` initializes from a dedicated NumPy generator, combines derivatives, and advances all fields simultaneously.
@@ -22,7 +22,7 @@ PRIMORDIA keeps the numerical world independent of display and input. The same `
 previous immutable field values
        │
        ├── local reaction derivatives
-       ├── four diffusion derivatives
+       ├── six diffusion/structure derivatives
        └── explicit environmental derivatives
                          │
                   sum derivatives

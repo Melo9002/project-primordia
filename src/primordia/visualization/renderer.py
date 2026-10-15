@@ -19,6 +19,8 @@ PALETTES: dict[str, tuple[tuple[int, int, int], ...]] = {
     "B": ((10, 12, 29), (58, 31, 111), (193, 62, 166), (255, 195, 98)),
     "R": ((10, 19, 25), (21, 76, 71), (50, 166, 116), (210, 238, 162)),
     "T": ((18, 27, 65), (48, 122, 181), (239, 215, 127), (237, 77, 87)),
+    "W": ((9, 15, 28), (54, 39, 100), (177, 80, 164), (243, 181, 107)),
+    "M": ((7, 15, 20), (53, 64, 66), (149, 119, 89), (236, 221, 181)),
 }
 
 
@@ -48,8 +50,8 @@ def _gradient_strength(field: np.ndarray) -> np.ndarray:
 def field_rgb(state: WorldState, mode: str) -> np.ndarray:
     """Map actual field values to an RGB image with perceptual contrast."""
     if mode in PALETTES:
-        ranges = {"A": (0.0, 1.1), "B": (0.0, 0.55), "R": (0.75, 1.05), "T": (0.96, 1.06)}
-        source = {"A": state.a, "B": state.b, "R": state.resource, "T": state.temperature}[mode]
+        ranges = {"A": (0.0, 1.1), "B": (0.0, 0.55), "R": (0.75, 1.05), "T": (0.96, 1.06), "W": (0.0, 0.25), "M": (0.0, 0.5)}
+        source = {"A": state.a, "B": state.b, "R": state.resource, "T": state.temperature, "W": state.waste, "M": state.matrix}[mode]
         low, high = ranges[mode]
         return np.clip(_palette(_normalize(source, low, high, 0.82), PALETTES[mode]), 0, 255).astype(np.uint8)
 
@@ -63,6 +65,10 @@ def field_rgb(state: WorldState, mode: str) -> np.ndarray:
     rgb = chemistry * illumination
     rgb += np.maximum(heat, 0.0)[..., None] * np.array((58.0, 10.0, -20.0))
     rgb += np.maximum(-heat, 0.0)[..., None] * np.array((-12.0, 13.0, 48.0))
+    waste = _normalize(state.waste, 0.0, 0.22)[..., None]
+    rgb += waste * np.array((22.0, -8.0, 24.0))
+    matrix = _normalize(state.matrix, 0.0, 0.45)[..., None]
+    rgb = rgb * (1.0 - 0.48 * matrix) + matrix * np.array((198.0, 167.0, 119.0)) * 0.48
     edge = _gradient_strength(state.b)[..., None]
     rgb += edge * np.array((25.0, 33.0, 35.0))
     return np.clip(rgb, 0, 255).astype(np.uint8)
@@ -81,7 +87,7 @@ def draw_color_legend(surface: pygame.Surface, mode: str, rect: pygame.Rect, fon
         color = tuple(_palette(value, palette)[0, 0].astype(int))
         pygame.draw.line(surface, color, (rect.x + x, rect.y), (rect.x + x, rect.bottom))
     pygame.draw.rect(surface, (93, 119, 133), rect, 1, border_radius=3)
-    labels = {"COMPOSITE": ("low activity", "reaction fronts"), "A": ("0.0", "1.1"), "B": ("0.0", "0.55"), "R": ("0.75", "1.05"), "T": ("0.96", "1.06")}
+    labels = {"COMPOSITE": ("low activity", "structured activity"), "A": ("0.0", "1.1"), "B": ("0.0", "0.55"), "R": ("0.75", "1.05"), "T": ("0.96", "1.06"), "W": ("0.0", "0.25"), "M": ("0.0", "0.5")}
     left, right = labels[mode]
     surface.blit(font.render(left, True, MUTED), (rect.x, rect.bottom + 4))
     right_image = font.render(right, True, MUTED)

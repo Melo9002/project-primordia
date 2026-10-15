@@ -6,7 +6,9 @@ Install with `python -m pip install -e ".[dev]"`, then launch `python -m primord
 
 ## Display
 
-The large panel renders the selected field. Composite maps B to red, resource to green, and inverse temperature to blue. Single-field views use fixed or robust ranges so visual changes reflect array values. Live plots show mean temperature and total B.
+The large panel renders the selected field. The composite maps B through a dark-cyan-gold chemistry palette, uses resource as illumination, adds a restrained warm/cool temperature tint, and highlights B gradients at reaction fronts. Single-field views use dedicated perceptual palettes and documented ranges. The legend shows the active scale.
+
+Hovering over the world shows grid coordinates and exact A/B/R/T values. The translucent colored circle previews the selected disturbance and brush radius. Metric cards report current values, recent ranges, and amber event lines for applied disturbances.
 
 ## Controls
 
@@ -17,6 +19,7 @@ The large panel renders the selected field. Composite maps B to red, resource to
 | `R` | reset arrays and RNG to the original seed |
 | `Tab` or `V` | cycle composite, A, B, R, T |
 | `T` | cycle heat, cool, add B, remove B, add resource |
+| click view/tool pills | select a field view or disturbance directly |
 | mouse click/drag | apply the selected tool to actual state |
 | `[` / `]` | change brush radius |
 | `+` / `-` | double/halve target tick rate |

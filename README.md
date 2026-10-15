@@ -19,11 +19,11 @@ Prototype 1 uses a modified Gray–Scott reaction–diffusion system. Resource a
 
 ## What you can do
 
-- Watch real field dynamics through five visualization modes.
+- Watch real field dynamics through five high-contrast visualization modes with live legends.
 - Pause, single-step, change speed, and reset exactly to the original seed.
 - Heat, cool, add/remove B, or add resource through local disturbances.
 - Adjust feed and kill parameters while the simulation runs.
-- See live mean-temperature and total-B traces.
+- Inspect exact A/B/R/T values under the cursor and see disturbance markers in live metric cards.
 - Export observations as CSV and state snapshots as compressed NPZ.
 - Run the same configuration headlessly.
 - Compare a baseline world and disturbed world from the same initial seed.
@@ -62,7 +62,7 @@ The default command also launches the GUI:
 python -m primordia
 ~~~
 
-Core controls: `Space` pauses, `N` advances one tick, `R` resets, `Tab` changes view, `T` changes the disturbance tool, mouse dragging applies it, `+`/`-` changes speed, arrow keys alter feed/kill, and `E` exports observations and a snapshot.
+Field views and disturbance tools are clickable. Core shortcuts: `Space` pauses, `N` advances one tick, `R` resets, `Tab` changes view, `T` changes the disturbance tool, mouse dragging applies it, `+`/`-` changes speed, arrow keys alter feed/kill, and `E` exports observations and a snapshot.
 
 ## Run reproducible experiments
 

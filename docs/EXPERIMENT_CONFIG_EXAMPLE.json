@@ -1,0 +1,14 @@
+{
+  "description": "Metadata template to store beside generated CSV files",
+  "preset": "presets/coral.json",
+  "seed": 7,
+  "ticks": 2000,
+  "sample_every": 10,
+  "disturbance": {
+    "tick": 800,
+    "field": "T",
+    "amount": 0.7,
+    "radius": 8
+  },
+  "interpretation_rule": "Compare with baseline; do not equate passive recovery with homeostasis."
+}

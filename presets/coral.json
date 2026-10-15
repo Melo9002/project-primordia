@@ -1,0 +1,12 @@
+{
+  "width": 128,
+  "height": 128,
+  "dt": 0.5,
+  "seed": 7,
+  "boundary": "periodic",
+  "dtype": "float64",
+  "initial": {"a": 1.0, "b": 0.0, "resource": 1.0, "temperature": 1.0, "noise": 0.015, "seed_radius": 8, "seed_b": 0.85},
+  "reaction": {"feed": 0.022, "kill": 0.051, "resource_half_saturation": 0.01, "temperature_sensitivity": 1.2, "reaction_heat": 0.012, "resource_cost": 0.04},
+  "diffusion": {"a": 0.16, "b": 0.08, "resource": 0.1, "temperature": 0.12},
+  "environment": {"ambient_temperature": 1.0, "thermal_exchange": 0.015, "external_heating": 0.0, "resource_supply": 0.05, "resource_removal": 0.002, "resource_target": 1.0}
+}

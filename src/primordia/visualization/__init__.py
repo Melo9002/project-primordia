@@ -1,0 +1,1 @@
+"""pygame-ce laboratory interface."""

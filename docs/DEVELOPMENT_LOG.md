@@ -19,3 +19,5 @@ Known limitations: forward Euler and clamps restrict safe parameter exploration;
 ## 2026-10-15 — Visual laboratory pass
 
 Reworked the pygame interface around a higher-contrast scientific dashboard. Added chemistry/resource/temperature composite shading, reaction-front highlights, perceptual single-field palettes, live legends, clickable field and disturbance pills, parameter cards, antialiased metric plots, disturbance event markers, cell-value hover readouts, and a translucent brush preview. Every visual channel remains derived from simulation state or recorded interaction history.
+
+Added zero-activation launchers for Windows and POSIX systems. They reuse the repository virtual environment and create/install it automatically on a fresh checkout.

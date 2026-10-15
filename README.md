@@ -50,7 +50,46 @@ python -m pip install -e ".[dev]"
 
 Python 3.13 and 3.14 are also supported when compatible wheels are available.
 
+## Install on Linux or macOS
+
+With Python 3.12 or newer:
+
+~~~bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+~~~
+
+Most current Linux distributions receive a pygame-ce wheel with SDL included. If installation reports a missing system library, install the SDL2 development packages supplied by your distribution and repeat the pip command.
+
 ## Launch the laboratory
+
+### One-step launchers
+
+On Windows, double-click `run-primordia.cmd` or run:
+
+~~~powershell
+.\run-primordia.cmd
+~~~
+
+On Linux or macOS:
+
+~~~bash
+./run-primordia.sh
+~~~
+
+Both launchers use the repository environment automatically. On a fresh checkout they create `.venv` and install the declared dependencies. Normal options pass through:
+
+~~~powershell
+.\run-primordia.cmd --preset presets/instability.json gui
+~~~
+
+~~~bash
+./run-primordia.sh --preset presets/instability.json gui
+~~~
+
+### Manual launch
 
 ~~~powershell
 python -m primordia --preset presets/coral.json gui

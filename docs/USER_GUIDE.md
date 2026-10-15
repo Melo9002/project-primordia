@@ -2,7 +2,9 @@
 
 ## Starting
 
-Install with `python -m pip install -e ".[dev]"`, then launch `python -m primordia` from the repository root. Select another preset with `--preset presets/instability.json`.
+On Windows, double-click `run-primordia.cmd` or run `.\run-primordia.cmd`. On Linux or macOS, run `./run-primordia.sh`. The launchers use the repository environment automatically and bootstrap it on a fresh checkout. Pass normal options after the launcher, such as `./run-primordia.sh --preset presets/instability.json gui`.
+
+For a manual environment, install with `python -m pip install -e ".[dev]"`, activate that environment, then launch `python -m primordia`.
 
 ## Display
 
